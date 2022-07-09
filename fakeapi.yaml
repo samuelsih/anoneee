@@ -1,0 +1,14 @@
+# example 
+
+PREFIX: "testing123"
+
+DATA:
+  - id: "uuid"
+  - name: "fullname"
+  - age: "age"
+  - job: "jobtitle"
+  - address: "streetaddress"
+  - myGender: "gender"
+
+AMOUNT: 50
+  
