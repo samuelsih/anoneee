@@ -14,8 +14,8 @@ import (
 	"github.com/goccy/go-yaml"
 )
 
-func Run() {
-	yamlData, err := readYAMLFile("fakeapi.yaml")
+func Run(sourceFile, port string) {
+	yamlData, err := readYAMLFile(sourceFile)
 	utils.CheckError(err)
 
 	structData := builder.NewBuilder()
@@ -31,7 +31,7 @@ func Run() {
 
 	fmt.Println("[5] DONE!")
 
-	server.RunServer("7000", *structData)
+	server.RunServer(port, *structData)
 }
 
 func readYAMLFile(filename string) (map[string]any, error) {

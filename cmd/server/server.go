@@ -58,7 +58,7 @@ func (app *App) serve() {
 		ErrorLog: log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
 	}
 
-	figure.NewColorFigure("ANONEEE", "", "blue", true).Print()
+	figure.NewColorFigure("- FAKE API -", "", "blue", true).Print()
 	println()
 	app.infoLog.Printf("Listening on http://localhost:%s\n", app.port)
 

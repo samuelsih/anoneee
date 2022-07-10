@@ -45,11 +45,9 @@ func (b *Builder) handleID() {
 func (b *Builder) Execute() error {
 	b.handleID()
 
-	var hasPrintGenerated bool
+	fmt.Println("[4] Generating fake value...")
 
 	if b.Value["id"] == "default" {
-		fmt.Println("Generating fake value...")
-
 		for i := 0; i < b.AmountOfData; i++ {
 			dataMap, err := faker.Generate(b.Value)
 			if err != nil {
@@ -62,37 +60,39 @@ func (b *Builder) Execute() error {
 		return nil
 	}
 
-	errChan := make(chan error, b.AmountOfData)
-	var mu sync.Mutex
+	var wg sync.WaitGroup
 
+	wg.Add(b.AmountOfData)
+	
 	for i := 0; i < b.AmountOfData; i++ {
-		go func() {
-			dataMap, err := faker.Generate(b.Value)
+		var genErr error = nil
+		go func(v map[string]any) {
+			defer wg.Done()
+			dataMap, err := faker.Generate(v)
 			if err != nil {
-				errChan <- err
+				genErr = err
 				return
 			}
 
 			b.SliceValue = append(b.SliceValue, dataMap)
-		}()
+		}(b.Value)
 
-		select {
-		case err := <-errChan:
-			if err != nil {
-				close(errChan)
-				return err
-			}
-		default:
-			printGeneratedFromFile(&mu, &hasPrintGenerated)
+		if genErr != nil {
+			return genErr
 		}
 	}
 
-	close(errChan)
+	wg.Wait()
+
 	return nil
 }
 
-func (b *Builder) WriteToJSONFile() error {
-	file, err := os.Create("result.json")
+func (b *Builder) WriteToJSONFile(filename string) error {
+	if filename == "" {
+		filename = "fakeapi_result.json"
+	}
+
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
@@ -104,14 +104,4 @@ func (b *Builder) WriteToJSONFile() error {
 
 	_, err = file.Write(jsonBytes)
 	return err
-}
-
-func printGeneratedFromFile(mu *sync.Mutex, checker *bool) {
-	if !(*checker) {
-		mu.Lock()
-		fmt.Println("[4] Generating fake value...")
-		*checker = true
-		mu.Unlock()
-	}
-
 }

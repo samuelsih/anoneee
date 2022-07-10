@@ -1,7 +1,9 @@
 package main
 
-import "github.com/samuelsih/fakeapi/cmd"
+import (
+	"github.com/samuelsih/fakeapi/cli"
+)
 
 func main() {
-	cmd.Run()
+	cli.Do()
 }

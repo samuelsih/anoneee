@@ -1,6 +1,4 @@
-# example 
-
-PREFIX: "testing123"
+PREFIX: "person"
 
 DATA:
   - id: "uuid"
@@ -10,5 +8,5 @@ DATA:
   - address: "streetaddress"
   - myGender: "gender"
 
-AMOUNT: 50
+AMOUNT: 500
   
