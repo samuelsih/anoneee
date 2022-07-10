@@ -5,9 +5,9 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/samuelsih/anoneee/utils"
 	"github.com/google/uuid"
 	"github.com/icrowley/fake"
+	"github.com/samuelsih/fakeapi/utils"
 )
 
 var (

@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/common-nighthawk/go-figure"
-	"github.com/samuelsih/anoneee/cmd/builder"
+	"github.com/samuelsih/fakeapi/cmd/builder"
 )
 
 type App struct {
@@ -58,16 +58,15 @@ func (app *App) serve() {
 		ErrorLog: log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile),
 	}
 
-
 	figure.NewColorFigure("ANONEEE", "", "blue", true).Print()
 	println()
 	app.infoLog.Printf("Listening on http://localhost:%s\n", app.port)
-	
+
 	if err := app.Server.ListenAndServe(); err != nil {
 		if !errors.Is(err, http.ErrServerClosed) {
 			app.infoLog.Fatal("Server failed to start:", err)
 		}
-	} 
+	}
 
 }
 
@@ -79,7 +78,7 @@ func (app *App) shutdown() {
 
 	app.infoLog.Println("Shutdown order received!")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	if err := app.Server.Shutdown(ctx); err != nil {

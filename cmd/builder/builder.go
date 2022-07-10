@@ -7,7 +7,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/samuelsih/anoneee/cmd/faker"
+	"github.com/samuelsih/fakeapi/cmd/faker"
 )
 
 type Builder struct {
@@ -19,7 +19,7 @@ type Builder struct {
 }
 
 func NewBuilder() *Builder {
-	builder := Builder {
+	builder := Builder{
 		Prefix:       "api",
 		IsPaginate:   false,
 		AmountOfData: 10,
@@ -55,10 +55,10 @@ func (b *Builder) Execute() error {
 			if err != nil {
 				return err
 			}
-	
+
 			b.SliceValue = append(b.SliceValue, dataMap)
 		}
-	
+
 		return nil
 	}
 
@@ -66,13 +66,13 @@ func (b *Builder) Execute() error {
 	var mu sync.Mutex
 
 	for i := 0; i < b.AmountOfData; i++ {
-		go func () {
+		go func() {
 			dataMap, err := faker.Generate(b.Value)
 			if err != nil {
 				errChan <- err
 				return
 			}
-	
+
 			b.SliceValue = append(b.SliceValue, dataMap)
 		}()
 
@@ -105,7 +105,6 @@ func (b *Builder) WriteToJSONFile() error {
 	_, err = file.Write(jsonBytes)
 	return err
 }
-
 
 func printGeneratedFromFile(mu *sync.Mutex, checker *bool) {
 	if !(*checker) {

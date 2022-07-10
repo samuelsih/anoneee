@@ -1,4 +1,4 @@
-module github.com/samuelsih/anoneee
+module github.com/samuelsih/fakeapi
 
 go 1.18
 

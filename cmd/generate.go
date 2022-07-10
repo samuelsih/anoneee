@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/samuelsih/anoneee/cmd/builder"
-	"github.com/samuelsih/anoneee/cmd/faker"
-	"github.com/samuelsih/anoneee/cmd/server"
-	"github.com/samuelsih/anoneee/utils"
+	"github.com/samuelsih/fakeapi/cmd/builder"
+	"github.com/samuelsih/fakeapi/cmd/faker"
+	"github.com/samuelsih/fakeapi/cmd/server"
+	"github.com/samuelsih/fakeapi/utils"
 
 	"github.com/goccy/go-yaml"
 )
@@ -36,7 +36,7 @@ func Run() {
 
 func readYAMLFile(filename string) (map[string]any, error) {
 	fmt.Println("[1] Reading file...")
-	
+
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func readYAMLFile(filename string) (map[string]any, error) {
 
 func extractYAMLData(yamlData map[string]any, builderData *builder.Builder) (*builder.Builder, error) {
 	fmt.Println("[2] Extracting data from file...")
-	
+
 	for yamlKey, yamlValue := range yamlData {
 		switch yamlKey {
 		case "PREFIX":
