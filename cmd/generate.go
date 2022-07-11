@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/samuelsih/fakeapi/cmd/builder"
 	"github.com/samuelsih/fakeapi/cmd/faker"
@@ -14,7 +15,7 @@ import (
 	"github.com/goccy/go-yaml"
 )
 
-func Run(sourceFile, port string) {
+func RunDefault(sourceFile, port string) {
 	yamlData, err := readYAMLFile(sourceFile)
 	utils.CheckError(err)
 
@@ -29,7 +30,56 @@ func Run(sourceFile, port string) {
 		log.Fatalf("Cant execute : %v", err)
 	}
 
-	fmt.Println("[5] DONE!")
+	server.RunServer(port, *structData)
+}
+
+func OnlyGenerateJSON(source, toFile string) {
+	yamlData, err := readYAMLFile(source)
+	utils.CheckError(err)
+
+	structData := builder.NewBuilder()
+
+	structData, err = extractYAMLData(yamlData, structData)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := structData.Execute(); err != nil {
+		log.Fatalf("Cant execute : %v", err)
+	}
+
+	err = structData.WriteToJSONFile(toFile)
+	if err != nil {
+		log.Fatalf("Cant create json file : %v", err)
+	}
+}
+
+func RunAll(source, port, toFile string) {
+	yamlData, err := readYAMLFile(source)
+	utils.CheckError(err)
+
+	structData := builder.NewBuilder()
+
+	structData, err = extractYAMLData(yamlData, structData)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := structData.Execute(); err != nil {
+		log.Fatalf("Cant execute : %v", err)
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+	
+	go func () {
+		defer wg.Done()
+		if err := structData.WriteToJSONFile(toFile); err != nil {
+			log.Fatalf("Cant create json file : %v", err)
+		}		
+	}()
+	
+	wg.Wait()
 
 	server.RunServer(port, *structData)
 }

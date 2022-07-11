@@ -97,6 +97,8 @@ func (b *Builder) WriteToJSONFile(filename string) error {
 		return err
 	}
 
+	defer file.Close()
+
 	jsonBytes, err := json.MarshalIndent(b.SliceValue, "", "\t")
 	if err != nil {
 		return err
