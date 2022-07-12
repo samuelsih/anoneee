@@ -122,5 +122,5 @@ func summonFakeData(fakeType string) (any, error) {
 		return randBool(), nil
 	}
 
-	return "", utils.CustomErrReturn(fmt.Sprintf("unknown faker type %v", fakeType))
+	return nil, utils.CustomErrReturn(fmt.Sprintf("unknown faker type %v", fakeType))
 }

@@ -42,13 +42,21 @@ func IsFakerType(fakeType string) bool {
 }
 
 func NotBrokenID(key, value string) bool {	
-	if key == "id" && (value == "default" || value == "uuid") {
-		return true
-	} 
+	if key == "id" {
+		if value == "default" || value == "uuid" {
+			return true
+		}
 
-	if key != "id" && (value == "default" || value == "uuid") {
 		return false
-	} 
+	}
+
+	if key != "id" {
+		if value != "default" && value != "uuid" {
+			return true
+		}
+
+		return false
+	}
 
 	return true
 }
